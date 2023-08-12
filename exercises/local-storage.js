@@ -37,4 +37,45 @@
  * * add the event listener to the container, pass the callback.
  */
 
-// Your code goes here...
+const container = document.querySelector('.cardsContainer');
+
+const addId = (id) => {
+  let storageData = localStorage.getItem('favs');
+  storageData = storageData ? (storageData += `,${id}`) : id;
+  localStorage.setItem('favs', storageData);
+};
+const removeId = (id) => {
+  const storageArr = localStorage.getItem('favs').split(',');
+
+  storageArr.splice(storageArr.indexOf(id), 1).join(',');
+
+  localStorage.setItem('favs', storageArr);
+};
+const callbackFn = (e) => {
+  const item = e.target;
+  if (Array.from(item.classList).includes('card')) {
+    const id = document.getElementById(item.id).id;
+    console.log(item);
+    if (item.style.backgroundColor === 'red') {
+      item.setAttribute('data-fav', 'false');
+      item.style.backgroundColor = 'white';
+      removeId(id);
+    } else {
+      item.style.backgroundColor = 'red';
+      item.setAttribute('data-fav', 'true');
+      addId(id);
+    }
+  }
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+  const ls = localStorage.getItem('favs').split(',');
+  if (!ls) return;
+
+  for (const fav of ls) {
+    const el = document.getElementById(fav);
+    el.style.backgroundColor = 'red';
+    el.setAttribute('data-fav', 'true');
+  }
+});
+container.addEventListener('click', callbackFn);

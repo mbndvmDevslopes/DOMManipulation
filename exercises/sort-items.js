@@ -1,8 +1,8 @@
 /**
  * SORTING NODES WITHIN A CONTAINER
  * Please, make sure to read the following files in the exercises-info folder before you start
- * * "02 SortingNode.md" 
-*/
+ * * "02 SortingNode.md"
+ */
 
 /**
  * @task
@@ -11,9 +11,7 @@
  * Example: const allItems = <Your code>;
  */
 
-// Your code goes here...
-
-
+const allItems = document.querySelectorAll('.item');
 
 /**
  * @task
@@ -22,10 +20,7 @@
  * Example: const sortBtn = <Your code>;
  */
 
-// Your code goes here...
-
-
-
+const sortButtons = document.querySelectorAll('[data-sortdir]');
 /**
  * @task
  * Create a sortData function that follows the list of requirements:
@@ -37,9 +32,29 @@
  * Example: sortData('asc') => <a-z order of items in the main container>
  */
 
-// Your code goes here...
+const sortData = (direction) => {
+  const container = document.getElementById('main');
+  const newArray = Array.from(allItems);
+  if (direction === 'desc') {
+    newArray.sort(sortAsc);
+  } else {
+    newArray.sort(sortDesc);
+  }
+  newArray.forEach((item) => {
+    container.append(item);
+  });
+};
 
-
+const sortAsc = (a, b) => {
+  if (a.id < b.id) return 1;
+  else if (a.id > b.id) return -1;
+  else return 0;
+};
+const sortDesc = (a, b) => {
+  if (a.id > b.id) return 1;
+  else if (a.id < b.id) return -1;
+  else return 0;
+};
 
 /**
  * @task
@@ -49,6 +64,12 @@
  * * Make the sortData function call, assign the item's dataset sortdir property
  */
 
-// Your code goes here...
-
-
+const callbackFn = (e) => {
+  const item = e.target;
+  if (Array.from(item.classList).includes('sortBtn')) {
+    const direction = item.getAttribute('data-sortdir');
+    sortData(direction);
+  }
+};
+const sort = document.querySelector('.sort');
+sort.addEventListener('click', callbackFn);
